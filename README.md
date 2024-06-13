@@ -1,4 +1,4 @@
-# CHƯƠNG TRÌNH QUẢN LÝ KHO VÀ BÁN CỦA CỬA HÀNG LAPTOP88
+![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/3d836c40-b514-4c15-9746-8153337ef4e7)# CHƯƠNG TRÌNH QUẢN LÝ KHO VÀ BÁN CỦA CỬA HÀNG LAPTOP88
 Mô tả bài toán quản lý: Cửa hàng laptop88 là một trong những chuỗi cửa hàng bán laptop lớn và uy tín. Có rất nhiều chi nhánh trên cả nước. Để quản lý chuỗi cửa hàng nhiều như vậy cần sự quản lý thật tốt để đảm bảo lợi nhuận và doanh thu. Giúp tối ưu hoá công việc, giúp báo cáo chính xác về tình hình kinh doanh. Bài tập này sẽ sử dụng ngôn ngữ SQL để quản lý kho nhập - xuất sản phẩm và việc bán hàng của của hàng.
 
 ## Những chức năng xây dựng để quản lý kho và bán hàng:
@@ -140,6 +140,304 @@ INSERT INTO GiaoDichKho(MaGiaoDichKho,MaSanPham,SoLuong,NgayGiaoDich,LoaiGiaoDic
 ('GD7', 'K7', 25, '2024-06-18', 'Nhập hàng', 'NCC1'),
 ('GD8', 'K8', 18, '2024-06-19', 'Nhập hàng', 'NCC2');
 ```
+
+## XÂY DỰNG CÁC THỦ TỤC THEO CÁC CHỨC NĂNG MONG MUỐN
+1. Quản lý việc bán hàng
+- Thêm, sửa, xoá sản phẩm
+- Tìm kiếm sản phẩm, lọc sản phẩm theo các tiêu chí của người quản lý hoặc của khách hàng
+- Xem thông tin chỉ tiết mỗi sản phẩm
+- Doanh thu của một ngày, một tháng,...
+- Số lượng sản phẩm bán chạy nhất.
+2. Quản lý kho 
+- Thống kê số lượng hàng trong kho
+- Báo cáo tình trạng hàng trong kho, số hàng tồn, số hàng đã hết chưa nhập về.
+
+-------------------------
+1. Quản lý việc bán hàng
+- THÊM SẢN PHẨM:
+![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/4e620bb6-1d7f-47db-b18c-58df5190091c)
+
+```
+---TẠO THỦ TỤC THÊM SẢN PHẨM MỚI 
+CREATE PROCEDURE themsanpham
+@TenSanPham nvarchar(50),
+@ThuongHieu nvarchar(50),
+@Mau nvarchar(50),
+@ThongSo nvarchar(MAX),
+@Gia decimal(10, 2),
+@SoLuongConLai int,
+@MaDanhMuc nvarchar(50),
+@MaNhaCC nvarchar(50)
+
+AS 
+BEGIN 
+SET NOCOUNT ON;
+INSERT INTO SanPham (TenSanPham,ThuongHieu,Mau,ThongSo,Gia,SoLuongConLai,MaDanhMuc,MaNhaCC) 
+VALUES (@TenSanPham,@ThuongHieu,@Mau,@ThongSo,@Gia,@SoLuongConLai,@MaDanhMuc,@MaNhaCC);
+end
+```
+
+- Sử dụng thủ tục:
+![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/b8ed82c9-e3d0-4ed1-a1ee-8f7512252492)
+
+```
+EXEC themsanpham 
+    @MaSanPham = 'M12',
+    @TenSanPham = N'Laptop A',
+    @ThuongHieu = N'BrandX',
+    @Mau = N'Den',
+    @ThongSo = N'Intel Core i7, 16GB RAM, 512GB SSD',
+    @Gia = 1500.00,
+    @SoLuongConLai = 10,
+    @MaDanhMuc = 'D3',
+    @MaNhaCC = 'NCC3';
+```
+Sản phẩm đã được thêm vào thành công 
+![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/ca3ba401-4767-4ffd-b23c-ecebb5217ea4)
+
+
+- XOÁ SẢN PHẨM
+  ![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/e1e5e0cf-0152-4115-a957-1c7a60bffb29)
+
+```
+CREATE PROCEDURE XoaSanPham
+    @MaSanPham NVARCHAR(50)
+AS 
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY
+        -- Kiểm tra xem sản phẩm có tồn tại hay không
+        IF EXISTS (SELECT 1 FROM SanPham WHERE MaSanPham = @MaSanPham)
+        BEGIN 
+            -- Xóa sản phẩm khỏi bảng SanPham
+            DELETE FROM SanPham WHERE MaSanPham = @MaSanPham;
+        END 
+        ELSE 
+        BEGIN
+            -- Nếu sản phẩm không tồn tại, đưa ra thông báo lỗi
+            RAISERROR('Sản phẩm với MaSanPham = %s không tồn tại.', 16, 1, @MaSanPham);
+        END
+    END TRY
+    BEGIN CATCH
+        -- Xử lý lỗi
+        DECLARE @ErrorMessage NVARCHAR(4000);
+        DECLARE @ErrorSeverity INT;
+        DECLARE @ErrorState INT;
+
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(),
+            @ErrorSeverity = ERROR_SEVERITY(),
+            @ErrorState = ERROR_STATE();
+
+        RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH;
+END;
+```
+Thử nghiệm thủ tục
+```
+EXEC XoaSanPham @MaSanPham = N'M12';
+```
+Đã Xoá thành công
+
+
+- CẬP NHẬT SẢN PHẨM
+```
+---TẠO THỦ TỤC CẬP NHẬT SẢN PHẨM 
+CREATE PROCEDURE capnhatsanpham
+@MaSanPham nvarchar(50),
+@TenSanPham nvarchar(50),
+@ThuongHieu nvarchar(50),
+@Mau nvarchar(50),
+@ThongSo nvarchar(MAX),
+@Gia decimal(10, 2),
+@SoLuongConLai int,
+@MaDanhMuc nvarchar(50),
+@MaNhaCC nvarchar(50)
+
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY
+        -- Kiểm tra xem sản phẩm có tồn tại hay không
+        IF EXISTS (SELECT 1 FROM SanPham WHERE MaSanPham = @MaSanPham)
+        BEGIN 
+            -- Cập nhật thông tin sản phẩm
+            UPDATE SanPham
+            SET 
+                TenSanPham = COALESCE(@TenSanPham, TenSanPham),
+                ThuongHieu = COALESCE(@ThuongHieu, ThuongHieu),
+                Mau = COALESCE(@Mau, Mau),
+                ThongSo = COALESCE(@ThongSo, ThongSo),
+                Gia = COALESCE(@Gia, Gia),
+                SoLuongConLai = COALESCE(@SoLuongConLai, SoLuongConLai),
+                MaDanhMuc = COALESCE(@MaDanhMuc, MaDanhMuc),
+                MaNhaCC = COALESCE(@MaNhaCC, MaNhaCC)
+            WHERE MaSanPham = @MaSanPham;
+        END 
+        ELSE 
+        BEGIN
+            -- Nếu sản phẩm không tồn tại, đưa ra thông báo lỗi
+            RAISERROR('Sản phẩm với MaSanPham = %s không tồn tại.', 16, 1, @MaSanPham);
+        END
+    END TRY
+    BEGIN CATCH
+        -- Xử lý lỗi
+        DECLARE @ErrorMessage NVARCHAR(4000);
+        DECLARE @ErrorSeverity INT;
+        DECLARE @ErrorState INT;
+
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(),
+            @ErrorSeverity = ERROR_SEVERITY(),
+            @ErrorState = ERROR_STATE();
+
+        RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH;
+END;
+```
+Kết quả thực nghiệm thủ tục:
+```
+EXEC capnhatsanpham
+    @MaSanPham = N'K10',
+    @TenSanPham = N'LapTop Dell gameming G5',
+    @Gia = 1600.00,
+	@Mau = 'Gaming',
+	@ThongSo = 'i5 1050H',
+	@ThuongHieu = 'mau xanh',
+    @SoLuongConLai = 8,
+	@MaDanhMuc = 'D3',
+	@MaNhaCC = 'NCC5';
+```
+![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/9faeace7-6d85-4e0a-afe8-1bb0ba56cc19)
+
+Sản phẩm được cập nhật thành công 
+
+- Xây dựng thủ tục tìm kiếm sản phẩm theo yêu cầu của khách hàng hoặc của người quản lý dựa vào các thông số: Tên Sản Phẩm, Thương Hiệu, Mẫu,....
+```
+---TẠO THỦ TỤC TÌM KIẾM SẢN PHẨM DỰA VÀO CÁC YÊU CẦU-----
+CREATE PROCEDURE timkiemsanpham
+    @MaSanPham NVARCHAR(50) = NULL,
+    @TenSanPham NVARCHAR(50) = NULL,
+    @ThuongHieu NVARCHAR(50) = NULL,
+    @Mau NVARCHAR(50) = NULL,
+    @ThongSo NVARCHAR(MAX) = NULL,
+    @MaDanhMuc NVARCHAR(50) = NULL,
+    @MaNhaCC NVARCHAR(50) = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT *
+    FROM SanPham
+    WHERE 
+        (MaSanPham = ISNULL(@MaSanPham, MaSanPham))
+        AND (TenSanPham LIKE '%' + ISNULL(@TenSanPham, '') + '%')
+        AND (ThuongHieu LIKE '%' + ISNULL(@ThuongHieu, '') + '%')
+        AND (Mau LIKE '%' + ISNULL(@Mau, '') + '%')
+        AND (ThongSo LIKE '%' + ISNULL(@ThongSo, '') + '%')
+        AND (MaDanhMuc = ISNULL(@MaDanhMuc, MaDanhMuc))
+        AND (MaNhaCC = ISNULL(@MaNhaCC, MaNhaCC));
+END;
+```
+
+- Thực nghiệm thủ tục tìm kiếm sản phẩm
+![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/9be40117-5e99-4d4e-a4a8-209d220166ac)
+
+- XEM THÔNG TIN CHI TIẾT MỖI SẢN PHẨM
+```SQL
+---- XEM THONG TIN CHI TIET MOI SAN PHAM
+CREATE PROCEDURE xemchitietsanpham
+    @MaSanPham NVARCHAR(50) = NULL,
+    @TenSanPham NVARCHAR(50) = NULL,
+    @ThuongHieu NVARCHAR(50) = NULL,
+    @Mau NVARCHAR(50) = NULL,
+    @ThongSo NVARCHAR(MAX) = NULL,
+    @MaDanhMuc NVARCHAR(50) = NULL,
+    @MaNhaCC NVARCHAR(50) = NULL
+
+AS
+BEGIN 
+SET NOCOUNT ON;
+SELECT * FROM SanPham WHERE MaSanPham = @MaSanPham;
+END
+```
+Kết quả thực nghiệm:
+
+![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/524fc3b6-62e5-4c1c-895f-22c4165c462c)
+
+
+- XÂY DỰNG THỦ TỤC TINMHS DOANH THU TRONG 1 NGÀY
+```SQL
+---- xay dung thu tuc tinh doanh thu 1 ngay
+CREATE PROCEDURE xemdoanhthu1ngay
+    @Ngay DATE
+AS
+BEGIN
+    SET NOCOUNT ON
+    DECLARE @DoanhThu DECIMAL(10, 2);
+
+    SELECT @DoanhThu = SUM(TongTien)
+    FROM DonHang
+    WHERE NgayDat = @Ngay;
+
+    SELECT @Ngay AS Ngay, ISNULL(@DoanhThu, 0) AS DoanhThu;
+END;
+
+```
+
+Kết quả thực nghiệm chương trình
+![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/8e91cd94-ccd5-41e0-bcfd-bb5f1a118d02)
+
+- XÂY DỰNG THỦ TỤC THỐNG KÊ 
+
+```SQL
+-- Tìm sản phẩm bán chạy nhất trong 1 tháng
+CREATE PROCEDURE sanphambanchaynhattrongthang
+    @Thang INT,
+    @Nam INT
+AS
+BEGIN
+    SET NOCOUNT ON; -- Tắt thông báo số bản ghi bị ảnh hưởng
+
+    -- Khai báo biến để lưu ngày bắt đầu và ngày kết thúc của tháng cần thống kê
+    DECLARE @StartDate DATE, @EndDate DATE;
+    SET @StartDate = DATEFROMPARTS(@Nam, @Thang, 1); -- Ngày đầu tiên của tháng
+    SET @EndDate = DATEADD(DAY, -1, DATEADD(MONTH, 1, @StartDate)); -- Ngày cuối cùng của tháng
+
+    -- Sử dụng CTE để tính tổng số lượng sản phẩm bán ra và lấy sản phẩm bán chạy nhất
+    WITH BanChayNhat AS (
+        SELECT TOP 1
+            CT.MaSanPham, -- Mã sản phẩm
+            SUM(CT.SoLuong) AS TongSoLuongBan -- Tổng số lượng sản phẩm bán ra
+        FROM ChiTietDonHang CT
+        INNER JOIN DonHang DH ON CT.MaDonHang = DH.MaDonHang
+        WHERE DH.NgayDat >= @StartDate AND DH.NgayDat <= @EndDate -- Điều kiện: Đơn hàng trong tháng
+        GROUP BY CT.MaSanPham -- Nhóm theo mã sản phẩm
+        ORDER BY SUM(CT.SoLuong) DESC -- Sắp xếp giảm dần theo tổng số lượng bán
+    )
+    -- Truy vấn để lấy thông tin chi tiết của sản phẩm bán chạy nhất
+    SELECT 
+        BC.MaSanPham, -- Mã sản phẩm
+        SP.TenSanPham, -- Tên sản phẩm
+        SP.ThuongHieu, -- Thương hiệu
+        SP.Mau, -- Màu sắc
+        SP.ThongSo, -- Thông số kỹ thuật
+        SP.Gia, -- Giá sản phẩm
+        SP.SoLuongConLai -- Số lượng còn lại trong kho
+    FROM BanChayNhat BC
+    INNER JOIN SanPham SP ON BC.MaSanPham = SP.MaSanPham; -- Liên kết với bảng SanPham để lấy thông tin chi tiết
+END;
+
+```
+Kết quả thực nghiệm chương trình
+![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/d8abb7f3-2a8a-4cdd-9743-df641d66e013)
+
+
+
+
+
 
 
 
