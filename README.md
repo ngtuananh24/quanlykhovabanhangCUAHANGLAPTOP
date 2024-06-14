@@ -1,4 +1,4 @@
-![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/3d836c40-b514-4c15-9746-8153337ef4e7)# CHƯƠNG TRÌNH QUẢN LÝ KHO VÀ BÁN CỦA CỬA HÀNG LAPTOP88
+# CHƯƠNG TRÌNH QUẢN LÝ KHO VÀ BÁN CỦA CỬA HÀNG LAPTOP88
 Mô tả bài toán quản lý: Cửa hàng laptop88 là một trong những chuỗi cửa hàng bán laptop lớn và uy tín. Có rất nhiều chi nhánh trên cả nước. Để quản lý chuỗi cửa hàng nhiều như vậy cần sự quản lý thật tốt để đảm bảo lợi nhuận và doanh thu. Giúp tối ưu hoá công việc, giúp báo cáo chính xác về tình hình kinh doanh. Bài tập này sẽ sử dụng ngôn ngữ SQL để quản lý kho nhập - xuất sản phẩm và việc bán hàng của của hàng.
 
 ## Những chức năng xây dựng để quản lý kho và bán hàng:
@@ -158,7 +158,9 @@ INSERT INTO GiaoDichKho(MaGiaoDichKho,MaSanPham,SoLuong,NgayGiaoDich,LoaiGiaoDic
 ![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/4e620bb6-1d7f-47db-b18c-58df5190091c)
 
 ```
----TẠO THỦ TỤC THÊM SẢN PHẨM MỚI 
+---TẠO THỦ TỤC THÊM SẢN PHẨM MỚI
+![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/3d836c40-b514-4c15-9746-8153337ef4e7)
+
 CREATE PROCEDURE themsanpham
 @TenSanPham nvarchar(50),
 @ThuongHieu nvarchar(50),
@@ -179,6 +181,7 @@ end
 
 - Sử dụng thủ tục:
 ![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/b8ed82c9-e3d0-4ed1-a1ee-8f7512252492)
+
 
 ```
 EXEC themsanpham 
