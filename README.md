@@ -1,5 +1,15 @@
-# CHƯƠNG TRÌNH QUẢN LÝ KHO VÀ BÁN CỦA CỬA HÀNG LAPTOP88
-Mô tả bài toán quản lý: Cửa hàng laptop88 là một trong những chuỗi cửa hàng bán laptop lớn và uy tín. Có rất nhiều chi nhánh trên cả nước. Để quản lý chuỗi cửa hàng nhiều như vậy cần sự quản lý thật tốt để đảm bảo lợi nhuận và doanh thu. Giúp tối ưu hoá công việc, giúp báo cáo chính xác về tình hình kinh doanh. Bài tập này sẽ sử dụng ngôn ngữ SQL để quản lý kho nhập - xuất sản phẩm và việc bán hàng của của hàng.
+# CHƯƠNG TRÌNH QUẢN LÝ KHO VÀ BÁN HÀNG CỦA CỬA HÀNG LAPTOP88
+***
+
+**Tác Giả: Nguyễn Tuấn Anh**
+
+**Ngày Hoàn Thành: 19/6/2024**
+
+**Link Quá Trình Làm Bài: [LINK](https://youtube.com/playlist?list=PLRynGF87fFvs0iWKBsDpWbi5ARvMvuBFm&si=FX-pBK57D-ld3E8L)**
+
+Mô tả bài toán quản lý: Cửa hàng laptop88 là một trong những chuỗi cửa hàng bán laptop lớn và uy tín. Có rất nhiều chi nhánh trên cả nước. Để quản lý chuỗi cửa hàng nhiều như vậy cần sự quản lý thật tốt để đảm bảo lợi nhuận và doanh thu. Giúp tối ưu hoá công việc, giúp báo cáo chính xác về tình hình kinh doanh. Bài tập này sẽ sử dụng ngôn ngữ SQL để quản lý kho nhập - xuất sản phẩm và việc bán hàng của cửa hàng.
+
+***
 
 ## Những chức năng xây dựng để quản lý kho và bán hàng:
 1. Quản lý sản phẩm
@@ -25,7 +35,7 @@ Mô tả bài toán quản lý: Cửa hàng laptop88 là một trong những chu
 3. Báo cáo
 - Báo cáo về doanh thu theo ngày, doanh thu theo tháng,... giúp quản lý được lợi nhuận.
 - Tạo và xem báo cáo hoạt động kinh doanh của cửa hàng, số lượng hàng tồn kho nhiều nhất, số lượng hàng bán chạy nhất,....
-  
+## Lên ý tưởng xây dựng các bảng quản lý kho và bán hàng  
 1. Sản phẩm sẽ quản lý những thông tin như: 🔑Mã sản phẩm, tên sản phẩm, thương hiệu, mẫu, thông số, giá, số lượng còn lại.
 2. Khách hàng: 🔑Mã khách hàng, tên khách hàng, số điện thoại,địa chỉ.
 3. Đơn hàng: 🔑Mã đơn hàng, mã khách hàng, ngày đặt hàng, tổng tiền.
