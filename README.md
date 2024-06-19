@@ -3,9 +3,13 @@
 
 **Tác Giả: Nguyễn Tuấn Anh**
 
+**MSSV: K215480106003**
+
+**Lớp: K57KMT**
+
 **Ngày Hoàn Thành: 19/6/2024**
 
-**Link Quá Trình Làm Bài: [LINK](https://youtube.com/playlist?list=PLRynGF87fFvs0iWKBsDpWbi5ARvMvuBFm&si=FX-pBK57D-ld3E8L)**
+**Link Quay Quá Trình Làm Bài: [LINK](https://youtube.com/playlist?list=PLRynGF87fFvs0iWKBsDpWbi5ARvMvuBFm&si=FX-pBK57D-ld3E8L)**
 
 Mô tả bài toán quản lý: Cửa hàng laptop88 là một trong những chuỗi cửa hàng bán laptop lớn và uy tín. Có rất nhiều chi nhánh trên cả nước. Để quản lý chuỗi cửa hàng nhiều như vậy cần sự quản lý thật tốt để đảm bảo lợi nhuận và doanh thu. Giúp tối ưu hoá công việc, giúp báo cáo chính xác về tình hình kinh doanh. Bài tập này sẽ sử dụng ngôn ngữ SQL để quản lý kho nhập - xuất sản phẩm và việc bán hàng của cửa hàng.
 
@@ -36,13 +40,13 @@ Mô tả bài toán quản lý: Cửa hàng laptop88 là một trong những chu
 - Báo cáo về doanh thu theo ngày, doanh thu theo tháng,... giúp quản lý được lợi nhuận.
 - Tạo và xem báo cáo hoạt động kinh doanh của cửa hàng, số lượng hàng tồn kho nhiều nhất, số lượng hàng bán chạy nhất,....
 ## Lên ý tưởng xây dựng các bảng quản lý kho và bán hàng  
-1. Sản phẩm sẽ quản lý những thông tin như: 🔑Mã sản phẩm, tên sản phẩm, thương hiệu, mẫu, thông số, giá, số lượng còn lại.
-2. Khách hàng: 🔑Mã khách hàng, tên khách hàng, số điện thoại,địa chỉ.
-3. Đơn hàng: 🔑Mã đơn hàng, mã khách hàng, ngày đặt hàng, tổng tiền.
-4. Chi tiết đơn hàng: 🔑Mã chi tiết đơn hàng, mã đơn hàng, mã sản phẩm, số lượng, giá.
-5. Nhà cung cấp: 🔑Mã nhà cung cấp, tên nhà cung cấp, tên người liên hệ, số điện thoại người liên hệ, địa chỉ.
-6. Danh mục: 🔑Mã danh mục, tên danh mục.
-7. Giao Dịch kho: 🔑Mã giao dịch, mã sản phẩm, số lượng, ngày giao dịch, loại giao dịch.
+1. Bảng Sản phẩm: SanPham(#MaSanPham, @TenSanPham, @ThuongHieu, @Mau, @ThongSo, @Gia, @SoLuongConLai)
+2. Bảng Khách hàng: KhachHang(#MaKhachHang,@TenKhachHang,@SoDienThoai,@DiaChi)
+3. Bảng Đơn hàng: DonHang(@MaDonHang,#MaKhachHang,@NgayDatHang,@TongTien)
+4. Bảng Chi tiết đơn hàng: ChiTietDonHang(#MaChiTietDonHang,@MaDonHang,@MaSanPham,@SoLuong,@Gia)
+5. Bảng Nhà cung cấp: NhaCungCap(#MaNCC,@TenNCC,@TenNguoiLienHe,@SoDienThoai,@DiaChi)
+6. Bảng Danh mục: DanhMuc(#MaDanhMuc,#TenDanhMuc)
+7. Bảng Giao Dịch kho: GiaoDichKho(#MaGiaoDich,@MaSanPham,@SoLuong,@NgayGiaoDich,@LoaiGiaoDich)
    
 Như vậy, dựa theo những thông tin mà ta đã thu thập được chúng ta sẽ xây dựng các bảng đáp ứng yêu cầu quản lý của của hàng laptop88.
 
@@ -169,7 +173,6 @@ INSERT INTO GiaoDichKho(MaGiaoDichKho,MaSanPham,SoLuong,NgayGiaoDich,LoaiGiaoDic
 
 ```
 ---TẠO THỦ TỤC THÊM SẢN PHẨM MỚI
-![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/3d836c40-b514-4c15-9746-8153337ef4e7)
 
 CREATE PROCEDURE themsanpham
 @TenSanPham nvarchar(50),
