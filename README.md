@@ -191,7 +191,6 @@ INSERT INTO SanPham (TenSanPham,ThuongHieu,Mau,ThongSo,Gia,SoLuongConLai,MaDanhM
 VALUES (@TenSanPham,@ThuongHieu,@Mau,@ThongSo,@Gia,@SoLuongConLai,@MaDanhMuc,@MaNhaCC);
 end
 ```
-
 - Sử dụng thủ tục:
 ![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/b8ed82c9-e3d0-4ed1-a1ee-8f7512252492)
 
@@ -213,6 +212,7 @@ Sản phẩm đã được thêm vào thành công
 
 
 - XOÁ SẢN PHẨM
+  
   ![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/e1e5e0cf-0152-4115-a957-1c7a60bffb29)
 
 ```
@@ -384,7 +384,7 @@ Kết quả thực nghiệm:
 ![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/524fc3b6-62e5-4c1c-895f-22c4165c462c)
 
 
-- XÂY DỰNG THỦ TỤC TINMHS DOANH THU TRONG 1 NGÀY
+- Xây Dựng Thủ Tục Tính Doanh Thu 1 Ngày
 ```SQL
 ---- xay dung thu tuc tinh doanh thu 1 ngay
 CREATE PROCEDURE xemdoanhthu1ngay
@@ -406,7 +406,71 @@ END;
 Kết quả thực nghiệm chương trình
 ![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/8e91cd94-ccd5-41e0-bcfd-bb5f1a118d02)
 
-- XÂY DỰNG THỦ TỤC THỐNG KÊ 
+- Xây Dựng Thủ Tục Tính Doanh Thu 1 Tháng
+```
+-- Tạo thủ tục tính doanh thu cho một tháng cụ thể
+CREATE PROCEDURE TinhDoanhThu1Thang
+    @Thang INT,  -- Tháng cần tính doanh thu
+    @Nam INT     -- Năm cần tính doanh thu
+AS
+BEGIN
+    SET NOCOUNT ON;  -- Tắt thông báo số lượng hàng bị ảnh hưởng bởi các lệnh SQL
+
+    DECLARE @StartDate DATE, @EndDate DATE;  -- Biến để lưu ngày bắt đầu và kết thúc của tháng
+    DECLARE @DoanhThu DECIMAL(10, 2);        -- Biến để lưu trữ tổng doanh thu
+
+    -- Xác định ngày bắt đầu của tháng
+    SET @StartDate = DATEFROMPARTS(@Nam, @Thang, 1);
+
+    -- Xác định ngày kết thúc của tháng bằng cách cộng thêm một tháng vào ngày bắt đầu, sau đó trừ đi một ngày
+    SET @EndDate = DATEADD(DAY, -1, DATEADD(MONTH, 1, @StartDate));
+
+    -- Tính tổng doanh thu của các đơn hàng được đặt trong khoảng thời gian này
+    SELECT @DoanhThu = SUM(TongTien)
+    FROM DonHang
+    WHERE NgayDat >= @StartDate AND NgayDat <= @EndDate;
+
+    -- Hiển thị kết quả doanh thu của tháng đó, nếu không có đơn hàng thì trả về 0
+    SELECT 'Thang' = @Thang, 'Nam' = @Nam, 'DoanhThu' = ISNULL(@DoanhThu, 0);
+END;
+```
+Thực nghiệm chương trình:
+
+![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/d16ae5cc-2766-4cd6-9468-010bdce14214)
+
+- Xây dựng thủ tục tính doanh thu bán hàng trong 1 năm:
+```
+-- Tạo thủ tục tính doanh thu cho một năm cụ thể
+CREATE PROCEDURE TinhDoanhThu1Nam
+    @Nam INT   -- Năm cần tính doanh thu
+AS
+BEGIN
+    SET NOCOUNT ON;  -- Tắt thông báo số lượng hàng bị ảnh hưởng bởi các lệnh SQL
+
+    DECLARE @StartDate DATE, @EndDate DATE;  -- Biến để lưu trữ ngày bắt đầu và kết thúc của năm
+    DECLARE @DoanhThu DECIMAL(10, 2);        -- Biến để lưu trữ tổng doanh thu
+
+    -- Xác định ngày bắt đầu của năm
+    SET @StartDate = DATEFROMPARTS(@Nam, 1, 1);
+
+    -- Xác định ngày kết thúc của năm bằng cách cộng thêm một năm vào ngày bắt đầu, sau đó trừ đi một ngày
+    SET @EndDate = DATEADD(DAY, -1, DATEADD(YEAR, 1, @StartDate));
+
+    -- Tính tổng doanh thu của các đơn hàng được đặt trong khoảng thời gian này
+    SELECT @DoanhThu = SUM(TongTien)
+    FROM DonHang
+    WHERE NgayDat >= @StartDate AND NgayDat <= @EndDate;
+
+    -- Hiển thị kết quả doanh thu của năm đó, nếu không có đơn hàng thì trả về 0
+    SELECT 'Nam' = @Nam, 'DoanhThu' = ISNULL(@DoanhThu, 0);
+END;
+```
+
+Thực nghiệm chương trình:
+
+![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/bc627180-2d2f-4f1b-a261-a0812bfe237d)
+
+- Xây dựng thủ tục thống kê mặt hàng bán chạy nhất trong tháng. 
 
 ```SQL
 -- Tìm sản phẩm bán chạy nhất trong 1 tháng
@@ -450,7 +514,163 @@ END;
 Kết quả thực nghiệm chương trình
 ![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/d8abb7f3-2a8a-4cdd-9743-df641d66e013)
 
+2. Quản Lý Kho Hàng
+- Tạo thủ tục xem hàng tồn kho
 
+```SQL
+-- Thủ tục xem số lượng và thống kê sản phẩm hàng tồn kho
+CREATE PROCEDURE xemHangTonKho
+AS
+BEGIN
+    SET NOCOUNT ON; -- Tắt thông báo số lượng hàng bị ảnh hưởng bởi các lệnh SQL
+
+    SELECT 
+        MaSanPham,       -- Chọn mã sản phẩm
+        TenSanPham,      -- Chọn tên sản phẩm
+        ThuongHieu,      -- Chọn thương hiệu sản phẩm
+        Mau,             -- Chọn màu sắc sản phẩm
+        ThongSo,         -- Chọn thông số kỹ thuật của sản phẩm
+        Gia,             -- Chọn giá của sản phẩm
+        SoLuongConLai    -- Chọn số lượng còn lại của sản phẩm
+    FROM SanPham         -- Từ bảng SanPham
+    WHERE SoLuongConLai > 0 -- Chỉ lấy những sản phẩm còn tồn kho (số lượng lớn hơn 0)
+    ORDER BY SoLuongConLai DESC; -- Sắp xếp kết quả theo số lượng còn lại giảm dần (từ nhiều tới ít)
+END;
+```
+
+- Trigger để tự động cập nhật số lượng hàng tồn kho
+
+```SQL
+-- Trigger để ghi log khi có sự thay đổi về số lượng tồn kho
+CREATE TRIGGER trigger_capnhatkhohang
+ON SanPham
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON; -- Tắt thông báo số lượng hàng bị ảnh hưởng bởi các lệnh SQL
+
+    -- Kiểm tra nếu cột SoLuongConLai bị thay đổi
+    IF (UPDATE(SoLuongConLai))
+    BEGIN
+        DECLARE @MaSanPham NVARCHAR(50); -- Khai báo biến để lưu mã sản phẩm
+        DECLARE @SoLuongMoi INT; -- Khai báo biến để lưu số lượng mới
+        DECLARE @SoLuongCu INT; -- Khai báo biến để lưu số lượng cũ
+        DECLARE @LoaiThayDoi NVARCHAR(10); -- Khai báo biến để lưu loại thay đổi (nhập hoặc bán)
+
+        -- Lấy thông tin từ bảng inserted và deleted
+        SELECT @MaSanPham = inserted.MaSanPham, 
+               @SoLuongMoi = inserted.SoLuongConLai, 
+               @SoLuongCu = deleted.SoLuongConLai
+        FROM inserted
+        INNER JOIN deleted ON inserted.MaSanPham = deleted.MaSanPham;
+
+        -- Xác định loại thay đổi
+        IF @SoLuongMoi > @SoLuongCu
+        BEGIN
+            SET @LoaiThayDoi = 'Nhap'; -- Nếu số lượng mới lớn hơn số lượng cũ, loại thay đổi là 'Nhap'
+        END
+        ELSE
+        BEGIN
+            SET @LoaiThayDoi = 'Ban'; -- Nếu số lượng mới nhỏ hơn hoặc bằng số lượng cũ, loại thay đổi là 'Ban'
+        END
+
+        -- Ghi log vào bảng KhoHangLog
+        INSERT INTO KhoHangLog (MaSanPham, SoLuongThayDoi, LoaiThayDoi)
+        VALUES (@MaSanPham, ABS(@SoLuongMoi - @SoLuongCu), @LoaiThayDoi); -- Chèn thông tin vào bảng log với số lượng thay đổi tuyệt đối
+    END
+END;
+```
+
+Kết quả thực nghiệm chương trình: 
+
+![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/4b264ce5-5cb4-4089-9f43-12025316251e)
+
+- Xây dựng thủ tục Liệt Kê Số Lượng Hàng Trong 1 Tháng Có Sử Dụng Con Trỏ (Cursor)
+```SQL
+-- Tạo thủ tục liệt kê số lượng hàng xuất kho trong 1 tháng
+CREATE PROCEDURE LietKeHangXuatKhoTrongThang
+    @Thang INT,  -- Tháng cần thống kê
+    @Nam INT     -- Năm cần thống kê
+AS
+BEGIN
+    SET NOCOUNT ON;  -- Tắt thông báo số lượng hàng bị ảnh hưởng bởi các lệnh SQL
+
+    -- Khai báo các biến để lưu trữ ngày bắt đầu và kết thúc của tháng
+    DECLARE @StartDate DATE, @EndDate DATE;
+    DECLARE @MaSanPham NVARCHAR(50);
+    DECLARE @TenSanPham NVARCHAR(50);
+    DECLARE @ThuongHieu NVARCHAR(50);
+    DECLARE @Mau NVARCHAR(50);
+    DECLARE @ThongSo NVARCHAR(MAX);
+    DECLARE @Gia DECIMAL(10, 2);
+    DECLARE @TongSoLuongXuat INT;
+
+    -- Xác định ngày bắt đầu của tháng
+    SET @StartDate = DATEFROMPARTS(@Nam, @Thang, 1);
+
+    -- Xác định ngày kết thúc của tháng bằng cách cộng thêm một tháng vào ngày bắt đầu, sau đó trừ đi một ngày
+    SET @EndDate = DATEADD(DAY, -1, DATEADD(MONTH, 1, @StartDate));
+
+    -- Khai báo con trỏ để duyệt qua từng dòng dữ liệu từ truy vấn
+    DECLARE cur CURSOR FOR
+    SELECT 
+        SP.MaSanPham,         -- Mã sản phẩm
+        SP.TenSanPham,        -- Tên sản phẩm
+        SP.ThuongHieu,        -- Thương hiệu sản phẩm
+        SP.Mau,               -- Màu sản phẩm
+        SP.ThongSo,           -- Thông số kỹ thuật của sản phẩm
+        SP.Gia,               -- Giá sản phẩm
+        SUM(CT.SoLuong) AS TongSoLuongXuat  -- Tổng số lượng xuất kho
+    FROM ChiTietDonHang CT
+    INNER JOIN DonHang DH ON CT.MaDonHang = DH.MaDonHang  -- Tham gia bảng DonHang với điều kiện MaDonHang
+    INNER JOIN SanPham SP ON CT.MaSanPham = SP.MaSanPham  -- Tham gia bảng SanPham với điều kiện MaSanPham
+    WHERE DH.NgayDat >= @StartDate AND DH.NgayDat <= @EndDate  -- Lọc các đơn hàng theo ngày đặt hàng trong khoảng thời gian của tháng đã xác định
+    GROUP BY SP.MaSanPham, SP.TenSanPham, SP.ThuongHieu, SP.Mau, SP.ThongSo, SP.Gia;  -- Nhóm các kết quả theo mã sản phẩm, tên sản phẩm, thương hiệu, màu, thông số và giá
+
+    -- Mở con trỏ
+    OPEN cur;
+
+    -- Khai báo bảng tạm để lưu kết quả
+    CREATE TABLE #KetQua (
+        MaSanPham NVARCHAR(50),    -- Mã sản phẩm
+        TenSanPham NVARCHAR(50),   -- Tên sản phẩm
+        ThuongHieu NVARCHAR(50),   -- Thương hiệu sản phẩm
+        Mau NVARCHAR(50),          -- Màu sản phẩm
+        ThongSo NVARCHAR(MAX),     -- Thông số kỹ thuật của sản phẩm
+        Gia DECIMAL(10, 2),        -- Giá sản phẩm
+        TongSoLuongXuat INT        -- Tổng số lượng xuất kho
+    );
+
+    -- Lấy từng dòng dữ liệu từ con trỏ và gán vào các biến tương ứng
+    FETCH NEXT FROM cur INTO @MaSanPham, @TenSanPham, @ThuongHieu, @Mau, @ThongSo, @Gia, @TongSoLuongXuat;
+
+    -- Duyệt qua từng dòng dữ liệu
+    WHILE @@FETCH_STATUS = 0
+    BEGIN
+        -- Chèn kết quả vào bảng tạm
+        INSERT INTO #KetQua (MaSanPham, TenSanPham, ThuongHieu, Mau, ThongSo, Gia, TongSoLuongXuat)
+        VALUES (@MaSanPham, @TenSanPham, @ThuongHieu, @Mau, @ThongSo, @Gia, @TongSoLuongXuat);
+
+        -- Lấy dòng dữ liệu tiếp theo từ con trỏ
+        FETCH NEXT FROM cur INTO @MaSanPham, @TenSanPham, @ThuongHieu, @Mau, @ThongSo, @Gia, @TongSoLuongXuat;
+    END
+
+    -- Đóng con trỏ
+    CLOSE cur;
+
+    -- Giải phóng con trỏ
+    DEALLOCATE cur;
+
+    -- Truy vấn kết quả từ bảng tạm và sắp xếp theo tổng số lượng xuất kho giảm dần
+    SELECT * FROM #KetQua ORDER BY TongSoLuongXuat DESC;
+
+    -- Xóa bảng tạm
+    DROP TABLE #KetQua;
+END;
+```
+Kết quả thực nghiệm chương trình, liệt kê số hàng xuất trong tháng 6/2024
+
+![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/63d1c1da-e7cc-4a86-bdad-db17c12f2321)
 
 
 
