@@ -85,7 +85,7 @@ Tạo sơ đồ thực thể liên kết giữa các bảng
 
 Thêm dữ liệu vào các bảng
 1. Dữ liệu thêm vào bảng SanPham
-```
+```SQL
 INSERT INTO SanPham (MaSanPham, TenSanPham, ThuongHieu, Mau, ThongSo, Gia, SoLuongConLai, MaDanhMuc, MaNhaCC) VALUES
 ('K1', 'Laptop A1', 'BrandA', 'Đen', 'CPU: i5, RAM: 8GB, SSD: 256GB, Màn hình: 14 inch', 15000000, 30, 'D1', 'NCC1'),
 ('K2', 'Laptop A2', 'BrandA', 'Xám', 'CPU: i7, RAM: 16GB, SSD: 512GB, Màn hình: 15.6 inch', 25000000, 20, 'D1', 'NCC1'),
@@ -100,7 +100,7 @@ INSERT INTO SanPham (MaSanPham, TenSanPham, ThuongHieu, Mau, ThongSo, Gia, SoLuo
 ```
 
 2. Dữ liệu thêm vào bảng Khach Hang
-```
+```SQL
 INSERT INTO KhachHang (MaKhachHang, TenKhachHang, DiaChi, SoDienThoai) VALUES ('KH1', 'Nguyễn Văn Anh', 'Số 123, Đường ABC, Quận XYZ, Thành phố HCM', '0123456789'),
 ('KH2', 'Trần Thị Bình', 'Số 456, Đường DEF, Quận UVW, Thành phố Hanoi', '0987654321'),
 ('KH3', 'Lê Văn Cung', 'Số 789, Đường GHI, Quận RST, Thành phố Đà Nẵng', '0365478921'),
@@ -108,7 +108,7 @@ INSERT INTO KhachHang (MaKhachHang, TenKhachHang, DiaChi, SoDienThoai) VALUES ('
 ```
 3. Dữ liệu thêm vào bảng đơn hàng
 
-```
+```SQL
 INSERT INTO DonHang (MaDonHang, MaKhachHang, NgayDat,TongTien)
 VALUES
 ('DH1', 'KH1', '2024-06-12','100000'),
@@ -117,7 +117,7 @@ VALUES
 ('DH4', 'KH4', '2024-06-15','135768');
 ```
 4. Thêm dữ liệu vào bảng ChiTietDonHang
-```
+```SQL
 INSERT INTO ChiTietDonHang(MaChiTietDonHang,MaDonHang,MaSanPham,SoLuong,Gia)
 VALUES 
 ('M10', 'DH1', 'K1', 2, 15000000),
@@ -128,14 +128,14 @@ VALUES
 ('M15', 'DH4', 'K6', 1, 18000000);
 ```
 5. Thêm dữ liệu vào bảng NhaCungCap
-```
+```SQL
 INSERT INTO NhaCungCap (MaNhaCC, TenNCC, TenNguoiLienHe, DiaChi) VALUES
 ('NCC1', N'Công ty A', N'Nguyễn Văn A', N'123 Đường ABC, Quận XYZ, Thành phố HCM'),
 ('NCC2', N'Công ty B', N'Trần Thị B', N'456 Đường DEF, Quận UVW, Thành phố Hanoi'),
 ('NCC3', N'Công ty C', N'Lê Văn C', N'789 Đường GHI, Quận RST, Thành phố Đà Nẵng');
 ```
 6. Thêm dữ liệu vào bảng Danh Mục
-```
+```SQL
 INSERT INTO DanhMuc(MaDanhMuc,TenDanhMuc) VALUES
 ('D1','Danh muc 1'),
 ('D2','Danh muc 2'),
@@ -143,7 +143,7 @@ INSERT INTO DanhMuc(MaDanhMuc,TenDanhMuc) VALUES
 ```
 
 8. Thêm dữ liệu vào bảng GiaoDichKho
-```
+```SQL
 INSERT INTO GiaoDichKho(MaGiaoDichKho,MaSanPham,SoLuong,NgayGiaoDich,LoaiGiaoDich,MaNCC) VALUES
 ('GD1', 'K1', 10, '2024-06-12', N'Nhập hàng', 'NCC1'),
 ('GD2', 'K2', 5, '2024-06-13', N'Nhập hàng', 'NCC2'),
@@ -171,7 +171,7 @@ INSERT INTO GiaoDichKho(MaGiaoDichKho,MaSanPham,SoLuong,NgayGiaoDich,LoaiGiaoDic
 - THÊM SẢN PHẨM:
 ![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/4e620bb6-1d7f-47db-b18c-58df5190091c)
 
-```
+```SQL
 ---TẠO THỦ TỤC THÊM SẢN PHẨM MỚI
 
 CREATE PROCEDURE themsanpham
@@ -195,7 +195,7 @@ end
 ![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/b8ed82c9-e3d0-4ed1-a1ee-8f7512252492)
 
 
-```
+```SQL
 EXEC themsanpham 
     @MaSanPham = 'M12',
     @TenSanPham = N'Laptop A',
@@ -215,7 +215,7 @@ Sản phẩm đã được thêm vào thành công
   
   ![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/e1e5e0cf-0152-4115-a957-1c7a60bffb29)
 
-```
+```SQL
 CREATE PROCEDURE XoaSanPham
     @MaSanPham NVARCHAR(50)
 AS 
@@ -251,14 +251,14 @@ BEGIN
 END;
 ```
 Thử nghiệm thủ tục
-```
+```SQL
 EXEC XoaSanPham @MaSanPham = N'M12';
 ```
 Đã Xoá thành công
 
 
 - CẬP NHẬT SẢN PHẨM
-```
+```SQL
 ---TẠO THỦ TỤC CẬP NHẬT SẢN PHẨM 
 CREATE PROCEDURE capnhatsanpham
 @MaSanPham nvarchar(50),
@@ -314,7 +314,8 @@ BEGIN
 END;
 ```
 Kết quả thực nghiệm thủ tục:
-```
+
+```SQL
 EXEC capnhatsanpham
     @MaSanPham = N'K10',
     @TenSanPham = N'LapTop Dell gameming G5',
@@ -331,7 +332,7 @@ EXEC capnhatsanpham
 Sản phẩm được cập nhật thành công 
 
 - Xây dựng thủ tục tìm kiếm sản phẩm theo yêu cầu của khách hàng hoặc của người quản lý dựa vào các thông số: Tên Sản Phẩm, Thương Hiệu, Mẫu,....
-```
+```SQL
 ---TẠO THỦ TỤC TÌM KIẾM SẢN PHẨM DỰA VÀO CÁC YÊU CẦU-----
 CREATE PROCEDURE timkiemsanpham
     @MaSanPham NVARCHAR(50) = NULL,
@@ -400,14 +401,13 @@ BEGIN
 
     SELECT @Ngay AS Ngay, ISNULL(@DoanhThu, 0) AS DoanhThu;
 END;
-
 ```
 
 Kết quả thực nghiệm chương trình
 ![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/8e91cd94-ccd5-41e0-bcfd-bb5f1a118d02)
 
 - Xây Dựng Thủ Tục Tính Doanh Thu 1 Tháng
-```
+```SQL
 -- Tạo thủ tục tính doanh thu cho một tháng cụ thể
 CREATE PROCEDURE TinhDoanhThu1Thang
     @Thang INT,  -- Tháng cần tính doanh thu
@@ -439,7 +439,7 @@ Thực nghiệm chương trình:
 ![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/d16ae5cc-2766-4cd6-9468-010bdce14214)
 
 - Xây dựng thủ tục tính doanh thu bán hàng trong 1 năm:
-```
+```SQL
 -- Tạo thủ tục tính doanh thu cho một năm cụ thể
 CREATE PROCEDURE TinhDoanhThu1Nam
     @Nam INT   -- Năm cần tính doanh thu
@@ -585,7 +585,77 @@ Kết quả thực nghiệm chương trình:
 
 ![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/4b264ce5-5cb4-4089-9f43-12025316251e)
 
-- Xây dựng thủ tục Liệt Kê Số Lượng Hàng Trong 1 Tháng Có Sử Dụng Con Trỏ (Cursor)
+- Xây dựng thủ tục liệt kê số hàng nhập trong 1 tháng;
+
+```SQL
+-- Tạo thủ tục liệt kê số lượng hàng nhập kho trong một tháng
+CREATE PROCEDURE LietKeHangNhapKhoTrongThang
+    @Thang INT,
+    @Nam INT
+AS
+BEGIN
+    SET NOCOUNT ON;  -- Tắt thông báo số lượng hàng bị ảnh hưởng bởi các lệnh SQL
+
+    DECLARE @StartDate DATE, @EndDate DATE;  -- Biến để lưu trữ ngày bắt đầu và kết thúc của tháng
+
+    -- Xác định ngày bắt đầu của tháng
+    SET @StartDate = DATEFROMPARTS(@Nam, @Thang, 1);
+
+    -- Xác định ngày kết thúc của tháng bằng cách cộng thêm một tháng vào ngày bắt đầu, sau đó trừ đi một ngày
+    SET @EndDate = DATEADD(DAY, -1, DATEADD(MONTH, 1, @StartDate));
+
+    -- Tạo bảng tạm thời để lưu trữ kết quả
+    CREATE TABLE #TempNhapKho (
+        MaSanPham NVARCHAR(50),
+        TenSanPham NVARCHAR(100),
+        SoLuongNhap INT
+    );
+
+    -- Khai báo biến cho cursor
+    DECLARE @MaSanPham NVARCHAR(50);
+    DECLARE @SoLuongNhap INT;
+
+    -- Khai báo cursor để lặp qua các sản phẩm trong bảng ChiTietDonHang
+    DECLARE curNhapKho CURSOR FOR
+        SELECT CT.MaSanPham, SUM(CT.SoLuong) AS SoLuongNhap
+        FROM ChiTietDonHang CT
+        INNER JOIN DonHang DH ON CT.MaDonHang = DH.MaDonHang
+        WHERE DH.NgayDat >= @StartDate AND DH.NgayDat <= @EndDate
+        GROUP BY CT.MaSanPham;
+
+    -- Mở cursor
+    OPEN curNhapKho;
+
+    -- Lặp và lấy từng sản phẩm nhập kho
+    FETCH NEXT FROM curNhapKho INTO @MaSanPham, @SoLuongNhap;
+    WHILE @@FETCH_STATUS = 0
+    BEGIN
+        -- Lấy thông tin sản phẩm và thêm vào bảng tạm
+        INSERT INTO #TempNhapKho (MaSanPham, TenSanPham, SoLuongNhap)
+        SELECT SP.MaSanPham, SP.TenSanPham, @SoLuongNhap
+        FROM SanPham SP
+        WHERE SP.MaSanPham = @MaSanPham;
+
+        -- Lấy dòng tiếp theo
+        FETCH NEXT FROM curNhapKho INTO @MaSanPham, @SoLuongNhap;
+    END
+
+    -- Đóng và xóa cursor
+    CLOSE curNhapKho;
+    DEALLOCATE curNhapKho;
+
+    -- Hiển thị kết quả từ bảng tạm
+    SELECT * FROM #TempNhapKho;
+
+    -- Xóa bảng tạm
+    DROP TABLE #TempNhapKho;
+END;
+```
+Thử nghiệm chương trình:
+
+![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/990ea703-f502-4bbe-ac68-c09c09ccfe6c)
+
+- Xây dựng thủ tục Liệt Kê Số Lượng Hàng Xuất Kho Trong 1 Tháng Có Sử Dụng Con Trỏ (Cursor)
 ```SQL
 -- Tạo thủ tục liệt kê số lượng hàng xuất kho trong 1 tháng
 CREATE PROCEDURE LietKeHangXuatKhoTrongThang
@@ -672,8 +742,64 @@ Kết quả thực nghiệm chương trình, liệt kê số hàng xuất trong 
 
 ![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/63d1c1da-e7cc-4a86-bdad-db17c12f2321)
 
+- Thống Kê Số Lượng Mặt Hàng Bán Được Nhiều Nhất Và Ít Nhất Trong Tháng
 
+```SQL
+-- Tạo thủ tục thống kê mặt hàng bán nhiều nhất và ít nhất trong một tháng
+CREATE PROCEDURE ThongKeMatHangBanNhieuItTrongThang
+    @Thang INT,
+    @Nam INT
+AS
+BEGIN
+    SET NOCOUNT ON;  -- Tắt thông báo số lượng hàng bị ảnh hưởng bởi các lệnh SQL
 
+    DECLARE @StartDate DATE, @EndDate DATE;  -- Biến để lưu trữ ngày bắt đầu và kết thúc của tháng
+
+    -- Xác định ngày bắt đầu của tháng
+    SET @StartDate = DATEFROMPARTS(@Nam, @Thang, 1);
+
+    -- Xác định ngày kết thúc của tháng bằng cách cộng thêm một tháng vào ngày bắt đầu, sau đó trừ đi một ngày
+    SET @EndDate = DATEADD(DAY, -1, DATEADD(MONTH, 1, @StartDate));
+
+    -- Thống kê mặt hàng bán nhiều nhất trong tháng
+    SELECT TOP 1
+        CT.MaSanPham,
+        SP.TenSanPham,
+        SP.ThuongHieu,
+        SP.Mau,
+        SP.ThongSo,
+        SUM(CT.SoLuong) AS TongSoLuongBan
+    FROM ChiTietDonHang CT
+    INNER JOIN DonHang DH ON CT.MaDonHang = DH.MaDonHang
+    INNER JOIN SanPham SP ON CT.MaSanPham = SP.MaSanPham
+    WHERE DH.NgayDat >= @StartDate AND DH.NgayDat <= @EndDate
+    GROUP BY CT.MaSanPham, SP.TenSanPham, SP.ThuongHieu, SP.Mau, SP.ThongSo
+    ORDER BY SUM(CT.SoLuong) DESC;
+
+    -- Thống kê mặt hàng bán ít nhất trong tháng
+    SELECT TOP 1
+        CT.MaSanPham,
+        SP.TenSanPham,
+        SP.ThuongHieu,
+        SP.Mau,
+        SP.ThongSo,
+        SUM(CT.SoLuong) AS TongSoLuongBan
+    FROM ChiTietDonHang CT
+    INNER JOIN DonHang DH ON CT.MaDonHang = DH.MaDonHang
+    INNER JOIN SanPham SP ON CT.MaSanPham = SP.MaSanPham
+    WHERE DH.NgayDat >= @StartDate AND DH.NgayDat <= @EndDate
+    GROUP BY CT.MaSanPham, SP.TenSanPham, SP.ThuongHieu, SP.Mau, SP.ThongSo
+    ORDER BY SUM(CT.SoLuong) ASC;
+END;
+```
+
+Thực nghiệm chương trình:
+
+![image](https://github.com/ngtuananh24/quanlykhovabanhangCUAHANGLAPTOP/assets/168797690/9145cf07-07a3-4c15-a703-57a3a2fcc4db)
+
+	Chương trình quản lý bán hàng và kho hàng được xây dựng bằng SQL đóng vai trò quan trọng trong việc tổ chức và điều hành hoạt động kinh doanh của cửa hàng. Bằng việc sử dụng SQL, cửa hàng có thể quản lý và theo dõi số lượng hàng hóa, đáp ứng nhu cầu mua sắm của khách hàng một cách hiệu quả. Đầu tiên, chương trình bao gồm các thủ tục để thêm, cập nhật, và xóa sản phẩm từ kho hàng. Thủ tục này giúp cho việc nhập mới sản phẩm, cập nhật thông tin sản phẩm và xóa sản phẩm khỏi kho trở nên đơn giản và nhanh chóng.
+
+	Tiếp theo, chương trình sử dụng trigger để ghi log khi có bất kỳ thay đổi nào về số lượng tồn kho. Trigger này giúp theo dõi các hoạt động nhập và xuất hàng, từ đó cung cấp thông tin quan trọng cho quản lý kho và bộ phận kế toán.  Bên cạnh đó, SQL còn hỗ trợ việc thống kê và báo cáo doanh thu, số lượng hàng bán ra trong một thời gian nhất định. Thủ tục và view được thiết kế để phân tích dữ liệu và đưa ra các báo cáo chi tiết, giúp quản lý đưa ra các quyết định kinh doanh hiệu quả. Để bảo đảm tính chính xác và minh bạch, chương trình thường xuyên thực hiện kiểm tra và kiểm kê hàng tồn kho. Các biện pháp phòng ngừa và xử lý sự cố cũng được tích hợp để đảm bảo hoạt động kinh doanh diễn ra suôn sẻ và không gián đoạn.
 
 
 
